@@ -14,22 +14,41 @@ public class Client {
 		ORB orb = ORB.init(args, null);
 
 		InitialTask initTask = InitialTaskHelper.narrow(orb.string_to_object(args[0]));
-		AbstractTask firstTask = initTask.init("511768@mail.muni.cz");
-		System.out.println("First task info: " + firstTask.info());
 
-		SimpleTask firstTaskRetype = SimpleTaskHelper.narrow(firstTask);
+		AbstractTask firstTaskAbstract;
+		try {
+			firstTaskAbstract = initTask.init("511768@mail.muni.cz");
+		} catch (TaskException e) {
+			System.out.println("First task exception: " + e.message);
+			return;
+		}
+		System.out.println("First task info: " + firstTaskAbstract.info());
+
+		SimpleTask firstTaskRetype = SimpleTaskHelper.narrow(firstTaskAbstract);
 		while (!firstTaskRetype.isReady()) {
 			continue;
 		}
 
-		AbstractTask secondTaskAbstract = firstTaskRetype.next();
+		AbstractTask secondTaskAbstract;
+		try {
+			secondTaskAbstract = firstTaskRetype.next();
+		} catch (TaskException e) {
+			System.out.println("Second task exception: " + e.message);
+			return;
+		}
 		System.out.println("Second task info: " + secondTaskAbstract.info());
 
 
 		AdderTask secondTaskRetype = AdderTaskHelper.narrow(secondTaskAbstract);
 		secondTaskRetype.result(secondTaskRetype.a() + secondTaskRetype.b());
 
-		AbstractTask thirdTaskAbstract = secondTaskRetype.next();
+		AbstractTask thirdTaskAbstract;
+		try {
+			thirdTaskAbstract = secondTaskRetype.next();
+		} catch (TaskException e) {
+			System.out.println("Third task exception: " + e.message);
+			return;
+		}
 		System.out.println("Third task info: " + thirdTaskAbstract.info());
 
 		MatrixTask thirdTaskRetype = MatrixTaskHelper.narrow(thirdTaskAbstract);
@@ -46,7 +65,13 @@ public class Client {
 		}
 		thirdTaskRetype.sendResult(det);
 
-		AbstractTask fourthTaskAbstract = thirdTaskRetype.next();
+		AbstractTask fourthTaskAbstract;
+		try {
+			fourthTaskAbstract = thirdTaskRetype.next();
+		} catch (TaskException e) {
+			System.out.println("Fourth task exception: " + e.message);
+			return;
+		}
 		System.out.println("Fourth task info: " + fourthTaskAbstract.info());
 
 		PolygonTask fourthTaskRetype = PolygonTaskHelper.narrow(fourthTaskAbstract);
@@ -57,7 +82,13 @@ public class Client {
 		}
 		fourthTaskRetype.sendResult(distance);
 
-		AbstractTask fifthTaskAbstract = fourthTaskRetype.next();
+		AbstractTask fifthTaskAbstract;
+		try {
+			fifthTaskAbstract = fourthTaskAbstract.next();
+		} catch (TaskException e) {
+			System.out.println("Fifth task exception: " + e.message);
+			return;
+		}
 		System.out.println("Fifth task info: " + fifthTaskAbstract.info());
 
 		FlipLineTask fifthTaskRetype = FlipLineTaskHelper.narrow(fifthTaskAbstract);
@@ -73,7 +104,7 @@ public class Client {
 		try {
 			AbstractTask sixthTaskAbstract = fifthTaskRetype.next();
 		} catch (TaskException e) {
-			System.out.println("Task exception: " + e.message);
+			System.out.println("Sixth task exception: " + e.message);
 		}
 	}
 }
