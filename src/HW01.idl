@@ -1,0 +1,45 @@
+module tasks {
+    exception TaskException {
+                    string message;
+        };
+
+    abstract interface AbstractTask {
+            string info();
+            AbstractTask next() raises(TaskException);
+    };
+
+    interface InitialTask {
+        AbstractTask init(in string email) raises(TaskException);
+    };
+
+    interface SimpleTask : AbstractTask {
+            boolean isReady();
+    };
+
+    interface AdderTask : AbstractTask  {
+            readonly attribute long a;
+            readonly attribute float b;
+            attribute double result;
+    };
+
+    interface MatrixTask : AbstractTask {
+            const long matrixSize = 3;
+            unsigned long getMatrixItem(in unsigned long row, in unsigned long col) raises(TaskException);
+            void sendResult(in long matrixDeterminant);
+    };
+
+    struct Point {
+            long x;
+            long y;
+        };
+    typedef sequence<Point> PolyLine;
+
+    interface PolygonTask : AbstractTask {
+            PolyLine getPolyLine();
+            void sendResult(in float polyLineLength);
+    };
+
+    interface FlipLineTask : AbstractTask {
+            void update(in PolyLine flippedPolyLine, out long lengthDifference);
+    };
+};

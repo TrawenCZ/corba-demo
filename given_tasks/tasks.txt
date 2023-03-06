@@ -1,0 +1,53 @@
+First task info: Instance of AbstractTask that you have received in this step is an instance of SimpleTask that is defined as follows:
+    interface SimpleTask : AbstractTask {
+        boolean isReady();
+    };
+
+You can get the next task using the next() method after the function isReady() returns true.
+Note that the next task might not be ready immediately.
+
+Second task info: Instance of AbstractTask that you have received in this step is an instance of AdderTask that is defined as follows:
+    interface AdderTask : AbstractTask  {
+        readonly attribute long a;
+        readonly attribute float b;
+        attribute double result;
+    };
+
+You can get the next task using the next() method after you have assigned the sum of attributes "a" and "b" to the attribute "result".
+
+Third task info: Instance of AbstractTask that you have received in this step is an instance of MatrixTask that is defined as follows:
+    interface MatrixTask : AbstractTask {
+        const long matrixSize = 3;
+        unsigned long getMatrixItem(in unsigned long row, in unsigned long col) raises(TaskException);
+        void sendResult(in long matrixDeterminant);
+    };
+
+You can get the next task using the next() method after you have set the determinant of the matrix using the sendResult method.
+See https://en.wikipedia.org/wiki/Determinant for the description of the matrix determinant.
+
+Fourth task info: Instance of AbstractTask that you have received in this step is an instance of PolygonTask that is defined as follows:
+    interface PolygonTask : AbstractTask {
+        PolyLine getPolyLine();
+        void sendResult(in float polyLineLength);
+    };
+
+Additionally, you will need the definition of a Point and a PolyLine (a sequence of points):
+    struct Point {
+        long x;
+        long y;
+    };
+    typedef sequence<Point> PolyLine;
+
+You can get the next task using the next() method after you set the length of the poly-line using the sendResult method (use Euclidean space for the distance computation).
+
+Fifth task info: Instance of AbstractTask that you have received in this step is an instance of FlipLineTask that is defined as follows:
+    interface FlipLineTask : AbstractTask {
+        void update(in PolyLine flippedPolyLine, out long lengthDifference);
+    };
+
+You can get the next task using the next() method after you have sent an updated poly-line via the update method.
+For the updated poly-line, use the first N points of the poly-line retrieved from the previous task but with reversed X and Y axis.
+The N is always smaller than the number of points in the original poly-line.
+The out parameter lengthDifference will give you the difference of your supplied poly-line length and the expected length.
+If you supply too many points, the lengthDifference will be negative.
+If your updated poly-line does not have enough points, the lengthDifference will be positive.
