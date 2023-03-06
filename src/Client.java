@@ -1,11 +1,7 @@
-import org.omg.CosNaming.*;
-import org.omg.CosNaming.NamingContextPackage.*;
 import org.omg.CORBA.*;
 import tasks.*;
 
 public class Client {
-	// Run this class as "java -cp . Client <server object IOR>"
-
 	public static Point[] switchXandYaxis(int numberOfPoints, Point[] polyLine) {
 		Point[] switchedPolyLine = new Point[numberOfPoints];
 		for (int i = 0; i < numberOfPoints; i++) {
@@ -16,12 +12,6 @@ public class Client {
 
 	public static void main(String[] args) throws Exception {
 		ORB orb = ORB.init(args, null);
-
-		/*
-		org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
-		NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
-		DateProg obj = DateProgHelper.narrow(ncRef.resolve_str("DateProg"));
-		*/
 
 		InitialTask initTask = InitialTaskHelper.narrow(orb.string_to_object(args[0]));
 		AbstractTask firstTask = initTask.init("511768@mail.muni.cz");
