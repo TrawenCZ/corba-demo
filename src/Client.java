@@ -6,12 +6,12 @@ import tasks.*;
 public class Client {
 	// Run this class as "java -cp . Client <server object IOR>"
 
-	public static Point[] flipPolyLine(int numberOfPoints, Point[] polyLine) {
-		Point[] flippedPolyLine = new Point[numberOfPoints];
+	public static Point[] switchXandYaxis(int numberOfPoints, Point[] polyLine) {
+		Point[] switchedPolyLine = new Point[numberOfPoints];
 		for (int i = 0; i < numberOfPoints; i++) {
-			flippedPolyLine[i] = polyLine[numberOfPoints - i - 1];
+			switchedPolyLine[i] = new Point(polyLine[i].y, polyLine[i].x);
 		}
-		return flippedPolyLine;
+		return switchedPolyLine;
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -74,13 +74,16 @@ public class Client {
 
 		IntHolder lengthDifference = new IntHolder();
 		int numberOfPoints = 0;
-		fifthTaskRetype.update(flipPolyLine(numberOfPoints, polyLine), lengthDifference);
+		fifthTaskRetype.update(switchXandYaxis(numberOfPoints, polyLine), lengthDifference);
 		while (lengthDifference.value != 0) {
 			numberOfPoints++;
-			fifthTaskRetype.update(flipPolyLine(numberOfPoints, polyLine), lengthDifference);
+			fifthTaskRetype.update(switchXandYaxis(numberOfPoints, polyLine), lengthDifference);
 		}
 
-		AbstractTask sixthTaskAbstract = fifthTaskRetype.next();
-		System.out.println("Sixth task info: " + sixthTaskAbstract.info());
+		try {
+			AbstractTask sixthTaskAbstract = fifthTaskRetype.next();
+		} catch (TaskException e) {
+			System.out.println("Task exception: " + e.message);
+		}
 	}
 }
